@@ -4,18 +4,57 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>{{ folder }}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button class="notification" (click)="presentPopover($event)" id="btnPop" autoHide="false">
+        <ion-icon size="large" name="cart"></ion-icon>
+        <span id="spRegistrosUpt" class="badge">{{registrosUpt}}</span>
+      </ion-button>
+
+
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">{{ folder }}</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <!--
+  <div>
+    <input id="txt_Img" type="file" (change)="onUploadChange($event)"
+        accept=".png, .jpg, .jpeg, .pdf" />
+</div>
+<ion-button shape="round" color="success" expand="full" (click)="GuardarImg()">REGISTRAR</ion-button>
+-->
 
-  <div id="container">
-    <strong class="capitalize">{{ folder }}</strong>
-    <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+<ion-card>
+  
+  <ion-item>
+    <ion-label>Categoria</ion-label>
+    <ion-select id="selEstado" value="" interface="action-sheet" (ionChange)="EstadoSelected()">
+      <ion-select-option value="{{est.Nombre}}" *ngFor="let est of listaCategorias">{{est.Nombre}}
+      </ion-select-option>
+      <ion-select-option value="" >TODOS </ion-select-option>
+    </ion-select>
+  </ion-item>
+     
+  
+      <ion-searchbar showCancelButton="focus" (keyup)="checkPaquete($event)" 
+      (ionCancel)="onCancel($event)"
+      (ionClear)="onCancel($event)"     
+      ></ion-searchbar>
+  
+    </ion-card>
+
+  <ion-card *ngFor="let Producto of listaProductos" >
+    <div (click)="MostrarProducto(Producto)">
+      <img src="{{Producto.Foto}}" width="100%" height="50%" />
+    <ion-card-header>
+      <ion-card-subtitle>{{Producto.Categoria}}</ion-card-subtitle>
+      <ion-card-title>{{Producto.Nombre}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      
+    </ion-card-content>
+    </div>
+    
+  </ion-card>
 </ion-content>

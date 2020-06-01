@@ -1,0 +1,81 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button autoHide="false" (click)="regresarBTN()">
+        <ion-icon size="large" name="arrow-back-outline"></ion-icon>
+        
+      </ion-button>
+
+    </ion-buttons>
+    <ion-title>Nuevo Cliente</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+
+  <div style="padding: 20px 20px 20px 20px ;">
+
+    <ion-item>
+      <ion-label position="floating">Cedula <ion-text color="danger">*</ion-text></ion-label>
+      <ion-input id="txtCedula" maxlength="10" TYPE="number" (keyup)="checkCedula($event)" ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+       Fotografia:
+      </ion-label>
+      <ion-button fill="outline" color="success" slot="end" (click)="hacerFoto()">
+        <ion-icon name="camera" zise="large"></ion-icon>
+      </ion-button>
+      <ion-button fill="outline" color="success" slot="end" (click)="SelecFoto()">
+        <ion-icon name="images" zise="large"></ion-icon>
+        
+      </ion-button>
+    </ion-item>
+
+    <div>
+      <div style="width: 105px;height: 105px;display: inline-block;">
+        <img [src]="foto" *ngIf="foto" width="100px" height="100px"/>
+      </div>
+      
+    </div>
+    <ion-item>
+      <ion-label position="floating">Nombre  <ion-text color="danger">*</ion-text></ion-label>
+      <ion-input id="txtNombre" ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Apellido  <ion-text color="danger">*</ion-text></ion-label>
+      <ion-input id="txtApellido" ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Telefono</ion-label>
+      <ion-input id="txtTelefono" type="tel"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Celular <ion-text color="danger">*</ion-text></ion-label>
+      <ion-input id="txtCelular" maxlength="10" type="tel"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Direccion <ion-text color="danger">*</ion-text></ion-label>
+      <ion-textarea id="txtDireccion"   placeholder="Ambato,Calle1 y calle2, referencia"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">E-Mail <ion-text color="danger">*</ion-text></ion-label>
+      <ion-input id="txtEmail" type="email" placeholder="ejemplo@mail.com"  ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Contraseña <ion-text color="danger">*</ion-text></ion-label>
+      <ion-input id="txtContraseña" type="password"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Confirmar Contraseña<ion-text color="danger">*</ion-text></ion-label>
+      <ion-input id="txtContraseñaCon" type="password"></ion-input>
+    </ion-item>
+    <ion-button shape="round" color="success" expand="full" (click)="  GuardarCliente()">REGISTRAR</ion-button>
+  </div>
+
+
+
+
+
+</ion-content>
