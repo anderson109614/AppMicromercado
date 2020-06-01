@@ -7,6 +7,7 @@ import {Cliente} from '../Modelos/Cliente';
 export class SerApiService {
  // urlP:string='https://serviciosand.000webhostapp.com/Servicios/'; 
  urlP:string='http://localhost/AppMicromercado/API-Micromercado/'; 
+//urlP:string='http://micromercadoand.atwebpages.com/API-Micromercado/'; 
  constructor(private http:HttpClient) { }
 
   loginSer(cli:Cliente){
@@ -27,5 +28,8 @@ export class SerApiService {
   }
   GetCategorias(){
     return this.http.get(this.urlP + 'Producto/Categoria.php');
+  }
+  GetDetalleProducto(Id:String){
+    return this.http.get(this.urlP + 'Producto/Detalle.php?Id='+Id);
   }
 }

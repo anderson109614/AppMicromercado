@@ -1,9 +1,50 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>DetalleProducto</ion-title>
-  </ion-toolbar>
-</ion-header>
 
 <ion-content>
+  <div class="divBarra">
+    <ion-buttons slot="start">
+      <ion-button autoHide="false" (click)="regresarBTN()" color="light">
+        <ion-icon size="large" name="arrow-back-outline" ></ion-icon>
+        
+      </ion-button>
 
+    </ion-buttons>
+  </div>
+  <img src="{{Produ.Foto}}" width="100%" height="360px" alt="">
+   <ion-card-header>
+      <ion-card-subtitle>{{Produ.Categoria}}</ion-card-subtitle>
+      <ion-card-title>{{Produ.Nombre}}</ion-card-title>
+    </ion-card-header>
+    <!---->
+    <ion-list>
+      <ion-radio-group value="0" (ionChange)="DetalleSelected()" id="GorupDetalle">
+        <ion-list-header>
+          <ion-label>Tipo de Producto</ion-label>
+        </ion-list-header>
+    
+        <ion-item *ngFor="let Producto of ListaDetalle">
+            <ion-label>{{Producto.Nombre}}</ion-label>
+            <ion-note slot="end" color="primary">{{Producto.Precio}} $</ion-note>
+          <ion-radio slot="start" value="{{Producto.Id}}"></ion-radio>
+        </ion-item>
+    
+       
+      </ion-radio-group>
+    </ion-list>
+    <!---->
+    <ion-item>
+      <ion-label>Cantidad</ion-label>
+      <ion-select value="1" (ionChange)="CantidadSelected()" id="CantidaSel">
+        <ion-select-option value="{{i}}" *ngFor="let i of ListaCantidad">{{i}}</ion-select-option>
+        
+      </ion-select>
+    </ion-item>
+    <!---->
+    <ion-item>
+      <ion-label>Cantidad</ion-label>
+      <ion-note slot="end" color="secondary" >{{Total}} $</ion-note>
+      
+    </ion-item>
+    <!---->
+
+    <ion-button shape="round" color="success" expand="full" (click)="cilAnadir()">AÑADIR  <ion-icon size="large" name="cart"></ion-icon></ion-button>
 </ion-content>

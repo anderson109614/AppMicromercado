@@ -24,11 +24,11 @@ const routes: Routes = [
   {
     path: 'registro-cli',
     loadChildren: () => import('./Pages/registro-cli/registro-cli.module').then( m => m.RegistroCliPageModule)
-  },*/
+  },
   {
     path: 'detalle-producto',
     loadChildren: () => import('./Pages/detalle-producto/detalle-producto.module').then( m => m.DetalleProductoPageModule)
-  },
+  },*/
   {
     path: 'pedido',
     loadChildren: () => import('./Pages/pedido/pedido.module').then( m => m.PedidoPageModule)

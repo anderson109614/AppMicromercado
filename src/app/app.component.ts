@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Platform } from '@ionic/angular';
+import { Platform, ModalController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Cliente} from './Modelos/Cliente';
+import { LoginPage } from './Pages/login/login.page';
+import { RegistroCliPage } from './Pages/registro-cli/registro-cli.page';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -37,41 +39,42 @@ export class AppComponent implements OnInit {
   public appPagesLog = [
     {
       title: 'Iniciar Secion',
-      url: '/folder/1',
+      url: '1',
       icon: 'enter'
     },
     {
       title: 'Registrar',
-      url: '/folder/3',
+      url: '3',
       icon: 'people-circle'
     }
   ];
   public appPagesLogAux1 = [
     {
       title: 'Iniciar Secion',
-      url: '/folder/1',
+      url: '1',
       icon: 'enter'
     },
     {
       title: 'Registrar',
-      url: '/folder/3',
+      url: '3',
       icon: 'people-circle'
     }
   ];
   public appPagesLogAux2 = [
     {
       title: 'Cerrar Secion',
-      url: '/folder/2',
+      url: '2',
       icon: 'arrow-back'
     }
   ];
   
   loginBol=false;
-
+  public clienteUso:Cliente;
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
-    private statusBar: StatusBar
+    private statusBar: StatusBar,
+    public modalController: ModalController
   ) {
     this.initializeApp();
   }
@@ -92,18 +95,67 @@ export class AppComponent implements OnInit {
 */
   }
   
-  Login(){
-   /*
-    if(this.loginBol){
-      //Accion de Cerrar la secion
-     this.appPagesLog=this.appPagesLogAux1;
-     
-    }else{
-      //Accion Para abrir el Login
-      this.appPagesLog=this.appPagesLogAux2;
-    }
-    */
+  Login(ac:string){
     
+    try {
+      let llegada = ac;
+      console.log(llegada);
+      if (llegada == '1') {
+        this.AbrirLogin();
+      } else if (llegada == '2') {
+        //cerrar secion
+        this.clienteUso={Contrasena:'',Email:'mail@micromercado.com',Nombre:'Usuario',Apellido:'',Foto:'../assets/user.png'};;
+        this.mostarInfoCliente(this.clienteUso);
+      } else if (llegada == '3') {
+        this.AbrirRegistroCli();
+      }
+    } catch (error) {
+      console.log('error');
+    }
+    
+  }
+  async AbrirLogin() {
+    const modal = await this.modalController.create({
+      component: LoginPage
+
+    });
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    //conectado: con, conectado 1 desconectado 0
+    //idUsuario:idu
+    try {
+
+      if (data.log == 1) {
+        //Cuando Inicio Secion
+        this.mostarInfoCliente(data.clie);
+        this.clienteUso=data.clie;
+      } 
+    } catch (error) {
+
+    }
+
+  }
+  async AbrirRegistroCli() {
+    const modal = await this.modalController.create({
+      component: RegistroCliPage
+
+    });
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    //conectado: con, conectado 1 desconectado 0
+    //idUsuario:idu
+    try {
+
+      if (data.log == 1) {
+        //Cuando el registro fue Correcto
+        this.mostarInfoCliente(data.clie);
+        this.clienteUso=data.clie;
+      }
+    } catch (error) {
+
+    }
   }
   mostarInfoCliente(cli:Cliente){
     this.cliente=cli;

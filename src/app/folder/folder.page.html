@@ -25,36 +25,34 @@
 <ion-button shape="round" color="success" expand="full" (click)="GuardarImg()">REGISTRAR</ion-button>
 -->
 
-<ion-card>
-  
-  <ion-item>
-    <ion-label>Categoria</ion-label>
-    <ion-select id="selEstado" value="" interface="action-sheet" (ionChange)="EstadoSelected()">
-      <ion-select-option value="{{est.Nombre}}" *ngFor="let est of listaCategorias">{{est.Nombre}}
-      </ion-select-option>
-      <ion-select-option value="" >TODOS </ion-select-option>
-    </ion-select>
-  </ion-item>
-     
-  
-      <ion-searchbar showCancelButton="focus" (keyup)="checkPaquete($event)" 
-      (ionCancel)="onCancel($event)"
-      (ionClear)="onCancel($event)"     
-      ></ion-searchbar>
-  
-    </ion-card>
+  <ion-card>
 
-  <ion-card *ngFor="let Producto of listaProductos" >
+    <ion-item>
+      <ion-label>Categoria</ion-label>
+      <ion-select id="selEstado" value="" interface="action-sheet" (ionChange)="EstadoSelected()">
+        <ion-select-option value="{{est.Nombre}}" *ngFor="let est of listaCategorias">{{est.Nombre}}
+        </ion-select-option>
+        <ion-select-option value="">TODOS </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+
+    <ion-searchbar showCancelButton="focus" (keyup)="checkPaquete($event)" (ionCancel)="onCancel($event)"
+      (ionClear)="onCancel($event)"></ion-searchbar>
+
+  </ion-card>
+
+  <ion-card *ngFor="let Producto of listaProductos">
     <div (click)="MostrarProducto(Producto)">
       <img src="{{Producto.Foto}}" width="100%" height="50%" />
-    <ion-card-header>
-      <ion-card-subtitle>{{Producto.Categoria}}</ion-card-subtitle>
-      <ion-card-title>{{Producto.Nombre}}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      
-    </ion-card-content>
+      <ion-card-header>
+        <ion-card-subtitle>{{Producto.Categoria}}</ion-card-subtitle>
+        <ion-card-title>{{Producto.Nombre}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+
+      </ion-card-content>
     </div>
-    
+
   </ion-card>
 </ion-content>

@@ -9,6 +9,7 @@ import {SerApiService} from '../Servicios/ser-api.service';
 import { ToastController, LoadingController } from '@ionic/angular';
 import { SerConeccionService } from '../Servicios/ser-coneccion.service';
 import {Producto} from '../Modelos/Producto';
+import {DetalleProductoPage} from '../Pages/detalle-producto/detalle-producto.page';
 @Component({
   selector: 'app-folder',
   templateUrl: './folder.page.html',
@@ -23,9 +24,10 @@ export class FolderPage implements OnInit {
   isConnected = false;
   clienteUso:Cliente;
   registrosUpt: number = 0;
+  ListaDetalles:any=[];
   constructor(public modalController: ModalController,
-    private activatedRoute: ActivatedRoute,private ac:AppComponent
-    ,private api:SerApiService,
+    private activatedRoute: ActivatedRoute,private ac:AppComponent,
+    private api:SerApiService,
     public toastController: ToastController,
     public loadingCtrl: LoadingController,
     private networkService: SerConeccionService) { }
@@ -34,22 +36,7 @@ export class FolderPage implements OnInit {
     this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
       this.isConnected = connected;
     });
-    
-    try {
-      let llegada = this.activatedRoute.snapshot.paramMap.get('id');
-      console.log(llegada);
-      if (llegada == '1') {
-        this.AbrirLogin();
-      } else if (llegada == '2') {
-        //cerrar secion
-        this.clienteUso={Contrasena:'',Email:'mail@micromercado.com',Nombre:'Usuario',Apellido:'',Foto:'../assets/user.png'};;
-        this.ac.mostarInfoCliente(this.clienteUso);
-      } else if (llegada == '3') {
-        this.AbrirRegistroCli();
-      }
-    } catch (error) {
-      console.log('error');
-    }
+       
     this.cargarProductos();
     this.cargarCategorias();
   }
@@ -160,8 +147,7 @@ export class FolderPage implements OnInit {
 
     } else {
       const loadingDB = await this.loadingCtrl.create({
-        message: 'MICROMERCADO',
-        duration: 5000
+        message: 'MICROMERCADO'
       });
       loadingDB.present();
       this.api.GetProductos().subscribe(
@@ -211,8 +197,46 @@ export class FolderPage implements OnInit {
       }
     );
   }
-  MostrarProducto(prod:Producto){
+  async MostrarProducto(prod:Producto){
     console.log(prod);
-  }
+    const modal = await this.modalController.create({
+      component: DetalleProductoPage,
+      componentProps: {
+        Produ:prod 
+      }
 
+    });
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    //conectado: con, conectado 1 desconectado 0
+    //idUsuario:idu
+    try {
+
+      if (data.log == 1) {
+       let sumo:boolean=false;
+
+        for(let i=0;i<this.ListaDetalles.length;i++){
+         
+          if(this.ListaDetalles[i].Det.Id==data.dete.Det.Id){
+            this.ListaDetalles[i].Cantidad=(parseFloat(this.ListaDetalles[i].Cantidad)+parseFloat( data.dete.Cantidad)).toString();
+            sumo=true;
+            break;
+          }
+          
+        }
+        console.log(sumo);
+        if(!sumo ||this.ListaDetalles.length==0 ){
+          this.ListaDetalles.push(data.dete);
+        }
+        
+        
+        this.registrosUpt=this.ListaDetalles.length;
+        console.log('lista det com',this.ListaDetalles);
+      } 
+    } catch (error) {
+
+    }
+  }
+  
 }
