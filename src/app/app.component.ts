@@ -6,6 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Cliente} from './Modelos/Cliente';
 import { LoginPage } from './Pages/login/login.page';
 import { RegistroCliPage } from './Pages/registro-cli/registro-cli.page';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -21,24 +22,24 @@ export class AppComponent implements OnInit {
   public appPages = [
     {
       title: 'Home',
-      url: '/folder/Home',
+      url: '/folder',
       icon: 'home'
-    },
-    {
-      title: 'Perfil',
-      url: '/info-cliente',
-      icon: 'body'
     },
     {
       title: 'Compras',
       url: '/compras',
       icon: 'cash'
     
+    },
+    {
+      title: 'Ayuda',
+      url: '/info-cliente',
+      icon: 'help-circle'
     }
   ];
   public appPagesLog = [
     {
-      title: 'Iniciar Secion',
+      title: 'Iniciar Sesion',
       url: '1',
       icon: 'enter'
     },
@@ -50,7 +51,7 @@ export class AppComponent implements OnInit {
   ];
   public appPagesLogAux1 = [
     {
-      title: 'Iniciar Secion',
+      title: 'Iniciar Sesion',
       url: '1',
       icon: 'enter'
     },
@@ -62,14 +63,14 @@ export class AppComponent implements OnInit {
   ];
   public appPagesLogAux2 = [
     {
-      title: 'Cerrar Secion',
+      title: 'Cerrar Sesion',
       url: '2',
       icon: 'arrow-back'
     }
   ];
   
   loginBol=false;
-  public clienteUso:Cliente;
+  public clienteUso:Cliente=this.cliente;
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -106,12 +107,15 @@ export class AppComponent implements OnInit {
         //cerrar secion
         this.clienteUso={Contrasena:'',Email:'mail@micromercado.com',Nombre:'Usuario',Apellido:'',Foto:'../assets/user.png'};;
         this.mostarInfoCliente(this.clienteUso);
+        //this.fp.añadirUsuarioUso(this.clienteUso);
+        
       } else if (llegada == '3') {
         this.AbrirRegistroCli();
       }
     } catch (error) {
       console.log('error');
     }
+
     
   }
   async AbrirLogin() {
@@ -130,6 +134,8 @@ export class AppComponent implements OnInit {
         //Cuando Inicio Secion
         this.mostarInfoCliente(data.clie);
         this.clienteUso=data.clie;
+       // this.fp.añadirUsuarioUso(data.clie);
+       
       } 
     } catch (error) {
 
@@ -152,6 +158,8 @@ export class AppComponent implements OnInit {
         //Cuando el registro fue Correcto
         this.mostarInfoCliente(data.clie);
         this.clienteUso=data.clie;
+        //this.fp.añadirUsuarioUso(data.clie);
+        //this.fp.actDestCarroPedido();
       }
     } catch (error) {
 
@@ -168,6 +176,7 @@ export class AppComponent implements OnInit {
       //Accion Para abrir el Login
       this.appPagesLog=this.appPagesLogAux1;
     }
+    
   }
   test(){
     console.log('test');

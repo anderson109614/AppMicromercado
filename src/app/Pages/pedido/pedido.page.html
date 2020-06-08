@@ -1,9 +1,62 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button autoHide="false" (click)="regresarBTN()">
+        <ion-icon size="large" name="arrow-back-outline"></ion-icon>
+
+      </ion-button>
+
+    </ion-buttons>
     <ion-title>Pedido</ion-title>
+
+
+    <ion-buttons slot="end">
+      <ion-button color="danger" disabled="{{btnDesactivado}}" (click)="clickEliminar()" id="btnEliminar" autoHide="false">
+        <ion-icon size="large" name="trash"></ion-icon>
+       
+      </ion-button>
+
+
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-list>
+    
+  <ion-item>
+    <ion-label>Producto</ion-label>
+    <ion-note slot="end" color="secondary">Cantidad</ion-note>
+    <ion-note slot="end" color="secondary">P.Uni</ion-note>
+    <ion-note slot="end" color="secondary">Sub. Total</ion-note>
+
+  </ion-item>
+  <ion-item-group style="padding-right: 20px;">
+    <ion-item-divider *ngFor="let det of Lista" style="display: flex;
+    align-items: center;vertical-align: middle;">
+
+      <ion-label><h2 style="width: 100%;
+        white-space: nowrap;
+        overflow: hidden; white-space: initial;">
+        {{det.Pro.Nombre}}-{{det.Det.Nombre}}</h2>
+      </ion-label>
+      <ion-note slot="end" color="secondary" style="display: flex;
+      align-items: center;vertical-align: middle;">{{det.Cantidad}}</ion-note>
+      <ion-note slot="end" color="secondary">{{det.Det.Precio}}</ion-note>
+      <ion-note slot="end" color="secondary">{{det.Det.Precio*det.Cantidad}}</ion-note>
+      <ion-checkbox color="danger" slot="start" (ionChange)="detalleChange($event.detail.checked,det.Det.Id )"></ion-checkbox>
+    </ion-item-divider>
+    
+   
+  </ion-item-group>
+  <ion-item>
+    <ion-label style="padding-left: 40%;">Total</ion-label>
+    
+    <ion-note slot="end" color="secondary">{{total}}</ion-note>
+
+  </ion-item>
+</ion-list>
+<ion-button shape="round" color="success" expand="full" (click)="cilComprar()">COMPRAR  <ion-icon size="large" name="cart"></ion-icon></ion-button>
+
 
 </ion-content>

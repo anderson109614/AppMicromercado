@@ -1,9 +1,24 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
     <ion-title>Compras</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-item>
+    <ion-label>Fecha</ion-label>
+    <ion-label slot="end">Total</ion-label>
+    <ion-label slot="end">Estado</ion-label>
+ 
+  </ion-item>
+  <ion-item *ngFor="let det of listaPedidos">
+    <ion-label>{{det.Fecha}}</ion-label>
+    <ion-label slot="end">{{det.Total}}</ion-label>
+    <ion-badge slot="end" color="{{det.Color}}" style="text-align: center;width: 70px;">{{det.Nombre}}</ion-badge>
+   
+ 
+  </ion-item>
 </ion-content>

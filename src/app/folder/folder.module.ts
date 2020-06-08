@@ -13,13 +13,15 @@ import {RegistroCliPage} from '../Pages/registro-cli/registro-cli.page';
 import {RegistroCliPageModule} from '../Pages/registro-cli/registro-cli.module';
 import {DetalleProductoPage} from '../Pages/detalle-producto/detalle-producto.page';
 import {DetalleProductoPageModule} from '../Pages/detalle-producto/detalle-producto.module';
-
+import {PedidoPageModule} from '../Pages/pedido/pedido.module';
+import {PedidoPage} from '../Pages/pedido/pedido.page';
 @NgModule({
-  entryComponents:[LoginPage,RegistroCliPage,DetalleProductoPage],
+  entryComponents:[LoginPage,RegistroCliPage,DetalleProductoPage,PedidoPage],
   imports: [
     CommonModule,
     LoginPageModule,
     FormsModule,
+    PedidoPageModule,
     DetalleProductoPageModule,
     RegistroCliPageModule,
     IonicModule,

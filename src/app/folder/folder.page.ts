@@ -3,13 +3,16 @@ import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { LoginPage } from '../Pages/login/login.page';
 import { RegistroCliPage } from '../Pages/registro-cli/registro-cli.page';
-import {AppComponent} from '../app.component';
+import { AppComponent } from '../app.component';
 import { Cliente } from '../Modelos/Cliente';
-import {SerApiService} from '../Servicios/ser-api.service';
+import { SerApiService } from '../Servicios/ser-api.service';
 import { ToastController, LoadingController } from '@ionic/angular';
 import { SerConeccionService } from '../Servicios/ser-coneccion.service';
-import {Producto} from '../Modelos/Producto';
-import {DetalleProductoPage} from '../Pages/detalle-producto/detalle-producto.page';
+import { Producto } from '../Modelos/Producto';
+import { DetalleProductoPage } from '../Pages/detalle-producto/detalle-producto.page';
+import { PedidoPage } from '../Pages/pedido/pedido.page';
+import { Pedido } from '../Modelos/Pedido';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 @Component({
   selector: 'app-folder',
   templateUrl: './folder.page.html',
@@ -17,28 +20,36 @@ import {DetalleProductoPage} from '../Pages/detalle-producto/detalle-producto.pa
 })
 export class FolderPage implements OnInit {
   public folder: string = "MICROMERCADO";
-  listaProductos:any=[];
-  listaProductosAux:any=[];
-  listaCategorias:any=[];
-  listaCategoriasAux:any=[];
+  listaProductos: any = [];
+  listaProductosAux: any = [];
+  listaCategorias: any = [];
+  listaCategoriasAux: any = [];
   isConnected = false;
-  clienteUso:Cliente;
+  clienteUso: Cliente;
   registrosUpt: number = 0;
-  ListaDetalles:any=[];
+  ListaDetalles: any = [];
+  btnDesactivado = true;
+  usuarioUso: Cliente;
+  total = '';
+  lat;
+  lon;
   constructor(public modalController: ModalController,
-    private activatedRoute: ActivatedRoute,private ac:AppComponent,
-    private api:SerApiService,
-    public toastController: ToastController,
+    private activatedRoute: ActivatedRoute,
+    private api: SerApiService,
+    public ac: AppComponent,
+    public toastController2: ToastController,
     public loadingCtrl: LoadingController,
-    private networkService: SerConeccionService) { }
+    private networkService: SerConeccionService,
+    private geolocation: Geolocation) { }
 
   ngOnInit() {
     this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
       this.isConnected = connected;
     });
-       
+
     this.cargarProductos();
     this.cargarCategorias();
+
   }
   EstadoSelected() {
     var est = (<HTMLSelectElement>document.getElementById("selEstado")).value;
@@ -57,7 +68,7 @@ export class FolderPage implements OnInit {
     if (value != "") {
       const result = this.listaProductos.filter(paquete => paquete.Categoria.toUpperCase().search(value.toUpperCase()) >= 0
         || paquete.Nombre.toUpperCase().search(value.toUpperCase()) >= 0
-        );
+      );
       this.listaProductos = result;
     } else {
       this.listaProductos = this.listaProductosAux;
@@ -65,37 +76,39 @@ export class FolderPage implements OnInit {
     //codpaquete
 
   }
-  cargarCategorias(){
+  cargarCategorias() {
     if (!this.isConnected) {
       console.log('Por favor enciende tu conexión a Internet');
       //Sin coneccio 
-      this.presentToast('Sin coneccion a internet');
+      this.presentToast2('Sin coneccion a internet');
 
     } else {
-      
+
       this.api.GetCategorias().subscribe(
         res => {
-          console.log('cat',res);
-         this.listaCategorias=res;
-         this.listaCategoriasAux=res;
-         
+          console.log('cat', res);
+          this.listaCategorias = res;
+          this.listaCategoriasAux = res;
+
         },
         err => {
           console.log(err);
-          
+
           //this.presentToast('Error Tiempo:'+err.message);
         }
       );
 
     }
   }
-  async presentToast(msj: string) {
-    const toast = await this.toastController.create({
+  async presentToast2(msj: string) {
+    console.log('toast');
+    const toasti = await this.toastController2.create({
       message: msj,
       duration: 5000
     });
-    toast.present();
+    toasti.present();
   }
+  /*
   async AbrirLogin() {
     const modal = await this.modalController.create({
       component: LoginPage
@@ -118,6 +131,8 @@ export class FolderPage implements OnInit {
     }
 
   }
+ 
+
   async AbrirRegistroCli() {
     const modal = await this.modalController.create({
       component: RegistroCliPage
@@ -139,11 +154,17 @@ export class FolderPage implements OnInit {
 
     }
   }
-  async cargarProductos(){
+   */
+  añadirUsuarioUso(cli: Cliente) {
+    this.usuarioUso = cli;
+    console.log('aña', cli);
+    this.actDestCarroPedido();
+  }
+  async cargarProductos() {
     if (!this.isConnected) {
       console.log('Por favor enciende tu conexión a Internet');
       //Sin coneccio 
-      this.presentToast('Sin coneccion a internet');
+      this.presentToast2('Sin coneccion a internet');
 
     } else {
       const loadingDB = await this.loadingCtrl.create({
@@ -152,10 +173,10 @@ export class FolderPage implements OnInit {
       loadingDB.present();
       this.api.GetProductos().subscribe(
         res => {
-          console.log('prod',res);
-         this.listaProductos=res;
-         this.listaProductosAux=res;
-         loadingDB.dismiss();
+         // console.log('prod', res);
+          this.listaProductos = res;
+          this.listaProductosAux = res;
+          loadingDB.dismiss();
         },
         err => {
           console.log(err);
@@ -165,7 +186,7 @@ export class FolderPage implements OnInit {
       );
 
     }
-    
+
   }
 
   base64textStringG = '';
@@ -184,25 +205,25 @@ export class FolderPage implements OnInit {
     this.base64textStringG = 'data:image/png;base64,' + btoa(e.target.result);
     //console.log(this.base64textStringG);
   }
-  GuardarImg(){
+  GuardarImg() {
     this.api.AñadirImg(this.base64textStringG).subscribe(
       res => {
-        console.log('ima',res);
-       
+        console.log('ima', res);
+
       },
       err => {
         console.log(err);
-       
+
         //this.presentToast('Error Tiempo:'+err.message);
       }
     );
   }
-  async MostrarProducto(prod:Producto){
-    console.log(prod);
+  async MostrarProducto(prod: Producto) {
+   // console.log(prod);
     const modal = await this.modalController.create({
       component: DetalleProductoPage,
       componentProps: {
-        Produ:prod 
+        Produ: prod
       }
 
     });
@@ -214,29 +235,159 @@ export class FolderPage implements OnInit {
     try {
 
       if (data.log == 1) {
-       let sumo:boolean=false;
+        let sumo: boolean = false;
 
-        for(let i=0;i<this.ListaDetalles.length;i++){
-         
-          if(this.ListaDetalles[i].Det.Id==data.dete.Det.Id){
-            this.ListaDetalles[i].Cantidad=(parseFloat(this.ListaDetalles[i].Cantidad)+parseFloat( data.dete.Cantidad)).toString();
-            sumo=true;
+        for (let i = 0; i < this.ListaDetalles.length; i++) {
+
+          if (this.ListaDetalles[i].Det.Id == data.dete.Det.Id) {
+            this.ListaDetalles[i].Cantidad = (parseFloat(this.ListaDetalles[i].Cantidad) + parseFloat(data.dete.Cantidad)).toString();
+            sumo = true;
             break;
           }
-          
+
         }
-        console.log(sumo);
-        if(!sumo ||this.ListaDetalles.length==0 ){
+       // console.log(sumo);
+        if (!sumo || this.ListaDetalles.length == 0) {
           this.ListaDetalles.push(data.dete);
         }
-        
-        
-        this.registrosUpt=this.ListaDetalles.length;
-        console.log('lista det com',this.ListaDetalles);
-      } 
+
+
+        this.registrosUpt = this.ListaDetalles.length;
+        this.actDestCarroPedido();
+        //console.log('lista det com', this.ListaDetalles);
+      }
     } catch (error) {
 
     }
   }
-  
+  async clickPredido() {
+    const modal = await this.modalController.create({
+      component: PedidoPage,
+      componentProps: {
+        Lista: this.ListaDetalles
+      }
+
+    });
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    //conectado: con, conectado 1 desconectado 0
+    //idUsuario:idu
+    try {
+     // console.log(data.can);
+      if (data.can == 1) {
+        //Cambio en la lista
+        this.ListaDetalles = data.newList;
+        this.registrosUpt = this.ListaDetalles.length;
+        this.actDestCarroPedido();
+      }
+      if (data.can == 2) {
+
+        this.ListaDetalles = data.newList;
+        this.registrosUpt = this.ListaDetalles.length;
+        this.actDestCarroPedido();
+        this.total = data.tot;
+        this.guardarPedido();
+      }
+    } catch (error) {
+
+    }
+
+  }
+  guardarPedido() {
+ 
+      if (this.isConnected) {
+
+        if (!this.btnDesactivado) {
+
+          if (this.ac.clienteUso.Nombre != 'Usuario') {
+
+            this.enviarInformacioPedido();
+          } else {
+
+            this.presentToast2('Inicia Sesion o Registrate');
+
+          }
+        } else {
+          this.presentToast2('Añade minimo un producto');
+
+        }
+
+
+      } else {
+        this.presentToast2('Coneccion no disponible');
+
+      }
+   
+
+
+  }
+  enviarInformacioPedido() {
+
+    this.CargarLocalisacion();
+    let ped: Pedido = {
+      Id: '0',
+      Fecha: '',
+      Id_Cliente: this.ac.clienteUso.Id.toString(),
+      Id_Estado: '1',
+      Total: this.total,
+      Ubicacion: this.lat + ';' + this.lon
+
+    };
+    this.api.guardarPedido(ped).subscribe(
+      res => {
+        if (res.Id != '0') {
+          for (let i = 0; i < this.ListaDetalles.length; i++) {
+            this.api.guardarDetallePedido(this.ListaDetalles[i], res.Id).subscribe(
+              res => {
+                if (i == this.ListaDetalles.length - 1) {
+                  this.ListaDetalles = [];
+                  this.registrosUpt = this.ListaDetalles.length
+                  this.btnDesactivado = true;
+                }
+              },
+              err => {
+                console.log(err);
+
+                //this.presentToast('Error Tiempo:'+err.message);
+              }
+            );
+          }
+        }
+
+      },
+      err => {
+        console.log(err);
+
+        //this.presentToast('Error Tiempo:'+err.message);
+      }
+    );
+
+  }
+  CargarLocalisacion() {
+
+    this.geolocation.getCurrentPosition().then((resp) => {
+      this.lat = resp.coords.latitude;
+      this.lon = resp.coords.longitude;
+
+
+    }).catch((error) => {
+
+    });
+
+  }
+  actDestCarroPedido() {
+    if (this.ListaDetalles.length > 0) {
+
+      this.btnDesactivado = false;
+
+
+    } else {
+      this.btnDesactivado = true;
+
+    }
+
+
+  }
+
 }

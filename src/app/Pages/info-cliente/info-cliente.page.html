@@ -1,9 +1,22 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>InfoCliente</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title></ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-item *ngFor="let det of listaCanfiguraciones">
+    <ion-label><h2 style="width: 100%;
+      white-space: nowrap;
+      overflow: hidden; white-space: initial;">
+      {{det.Nombre}} {{det.Descripcion}}</h2>
+    </ion-label>
+    <a href="{{det.HTML}}" *ngIf="det.HTML"><ion-icon slot="end" size="large" name="{{det.Icono}}"></ion-icon></a> 
+    
+    
+  </ion-item>
+  
 </ion-content>

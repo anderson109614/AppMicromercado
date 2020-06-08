@@ -6,7 +6,7 @@
     <ion-title>{{ folder }}</ion-title>
 
     <ion-buttons slot="end">
-      <ion-button class="notification" (click)="presentPopover($event)" id="btnPop" autoHide="false">
+      <ion-button class="notification" disabled="{{btnDesactivado}}" (click)="clickPredido()" id="btnPop" autoHide="false">
         <ion-icon size="large" name="cart"></ion-icon>
         <span id="spRegistrosUpt" class="badge">{{registrosUpt}}</span>
       </ion-button>

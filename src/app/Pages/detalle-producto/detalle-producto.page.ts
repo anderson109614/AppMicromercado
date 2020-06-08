@@ -90,6 +90,7 @@ export class DetalleProductoPage implements OnInit {
   cilAnadir(){
     let det:DetalleCompra={
       Det:this.DetalleSelec,
+      Pro:this.Produ,
       Cantidad:this.cantidadSel.toString()
     };
     if(this.verificarAñadir(det)){

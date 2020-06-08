@@ -4,10 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { PedidoPage } from './pedido.page';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: PedidoPage
-  }
+ 
 ];
 
 @NgModule({

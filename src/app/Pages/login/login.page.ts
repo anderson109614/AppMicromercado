@@ -28,7 +28,7 @@ export class LoginPage implements OnInit {
   clickLogin(){
 
     if (!this.isConnected) {
-      console.log('Por favor enciende tu conexión a Internet');
+      console.log('Por favor encienda su conexión a Internet');
       //Sin coneccio 
       
 
@@ -62,7 +62,7 @@ export class LoginPage implements OnInit {
           }
         } catch (error) {
           console.log('Error');
-          this.presentToast('Usuario o Contraeña icorrectos');
+          this.presentToast('Usuario o Contraeña incorrectos');
         }
         
       },
