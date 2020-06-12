@@ -19,7 +19,7 @@ export class PedidoPage implements OnInit {
   calcularToral(){
     this.total=0;
     for(let j=0;j<this.Lista.length;j++){
-      this.total+=parseFloat(this.Lista[j].Det.Precio);
+      this.total+=parseFloat(this.Lista[j].Det.Precio)*parseFloat(this.Lista[j].Cantidad);
     
     }
   }

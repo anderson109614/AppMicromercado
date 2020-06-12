@@ -9,8 +9,8 @@ import { DetalleCompra } from '../Modelos/DetaleCompra';
   providedIn: 'root'
 })
 export class SerApiService {
-  // urlP:string='https://serviciosand.000webhostapp.com/Servicios/'; 
-  urlP: string = 'http://localhost/AppMicromercado/API-Micromercado/';
+   urlP:string='https://serviciosand.000webhostapp.com/API-Micromercado/'; 
+  //urlP: string = 'http://localhost/AppMicromercado/API-Micromercado/';
   //urlP:string='http://micromercadoand.atwebpages.com/API-Micromercado/'; 
   constructor(private http: HttpClient) { }
 

@@ -38,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             `Telefono`,
             `Celular`,
             `Direccion`,
+            'Foto',
             `Ubicacion`,
             `Contrasena`,
             `Email`
@@ -49,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             :Telefono,
             :Celular,
             :Direccion,
+            :Foto
             :Ubicacion,
             :Contrasena,
             :Email
@@ -60,6 +62,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $statement->bindValue(':Telefono', $input['Telefono']);
         $statement->bindValue(':Celular', $input['Celular']);
         $statement->bindValue(':Direccion', $input['Direccion']);
+
+        $nomI3='img_avatar.png';
+        if(strlen($input['Foto'])>0){
+            $nomI3=GuardarImg($input['Foto']);
+        } 
+        $statement->bindValue(':Foto', $nomI3);
         $statement->bindValue(':Ubicacion', $input['Ubicacion']);
         $statement->bindValue(':Contrasena', $input['Contrasena']);
         $statement->bindValue(':Email', $input['Email']);
@@ -74,7 +82,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
 }
+function GuardarImg($img,$nom)
+{
+    //$archivo =  "/var/www/html/webapp/sgp.ini";
+    //$contenido = parse_ini_file($archivo, true);
+    //$dbuPath = $contenido["DBU_PATH"];
 
+    $base_to_php = explode(',', $img);
+    $data = base64_decode($base_to_php[1]);
+    //codigoCliente_codPaquete_campania-anio -mes-dia-hora-minuto.tipo  date("d") . " del " . date("m")
+    $nomImg=date("Y")."-".date("m")."-".date("d")."-".date("G")."-".date("i").".png";
+    $filepath = "/home/www/micromercadoand.atwebpages.com/img/".$nomImg; // or image.jpg
+    file_put_contents($filepath, $data);
+    return $nomImg;
+}
 
 header('Content-type: application/json');
 header("Access-Control-Allow-Origin: *");

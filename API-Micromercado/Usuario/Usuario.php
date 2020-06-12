@@ -31,7 +31,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
         //$input = $_POST;
         $input = (array) json_decode(file_get_contents('php://input'), TRUE);
-        $sql = "SELECT * FROM `cliente` WHERE `Email`=:Email and `Contrasena`=:Contrasena";
+        $sql = "SELECT  `Id`,
+  `Cedula`,
+  `Nombre`,
+  `Apellido`,
+  `Telefono`,
+  `Celular`,
+  `Direccion`,
+  CONCAT('http://micromercadoand.atwebpages.com/img/',Foto) as Foto,
+  `Ubicacion`,
+  `Contrasena`,
+  `Email`
+         FROM `cliente` WHERE `Email`=:Email and `Contrasena`=:Contrasena";
         $statement = $dbConn->prepare($sql);
         $statement->bindValue(':Email', $input['Email']);
         $statement->bindValue(':Contrasena', $input['Contrasena']);

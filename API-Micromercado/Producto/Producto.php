@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
            p.Id,
            cp.Nombre as Categoria,
            p.Nombre,
-           p.Foto
+           CONCAT('http://micromercadoand.atwebpages.com/img/',p.Foto) as Foto
        FROM
            categoriaprod cp,
            producto p
