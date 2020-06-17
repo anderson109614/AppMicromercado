@@ -4,5 +4,6 @@ export interface Pedido{
     Fecha:string,
     Total:string ,
     Ubicacion:string ,
-    Id_Estado:string  
+    Id_Estado:string,
+    IVA:string 
   }

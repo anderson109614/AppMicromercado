@@ -13,6 +13,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 export class RegistroCliPage implements OnInit {
   isConnected = false;
   foto: string = '';
+  listaMails:any=[];
   constructor(public modalController: ModalController,
     public toastController: ToastController,
     private api:SerApiService,
@@ -23,6 +24,7 @@ export class RegistroCliPage implements OnInit {
     this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
       this.isConnected = connected;
     });
+    this.CargarMails();
   }
   regresarBTN() {
     this.modalController.dismiss({
@@ -30,7 +32,18 @@ export class RegistroCliPage implements OnInit {
     });
 
   }
-  
+  CargarMails(){
+    this.api.GetClientesMail('Anderson').subscribe(
+      res => {
+        this.listaMails=res;
+        
+      },
+      err => {
+        console.log(err);
+        
+      }
+    );
+  }
   hacerFoto() {
     const options: CameraOptions = {
       destinationType: this.camera.DestinationType.DATA_URL,
@@ -158,6 +171,7 @@ export class RegistroCliPage implements OnInit {
       return false;
     }
     if(this.mailEsxistencia(cli.Email)){
+      console.log('mail',cli.Email);
       this.presentToast('El Email ya de encuentra registrado');
       return false;
     }
@@ -173,26 +187,12 @@ export class RegistroCliPage implements OnInit {
     return true
   }
   mailEsxistencia(mail:String){
-    this.api.GetClientesMail(mail).subscribe(
-      res => {
-        try {
-          if(res[0].Email==mail){
-            return true;
-          }else{
-            return false;
-          }
-        } catch (error) {
-          return false;
-        }
-        
-      },
-      err => {
-        console.log(err);
-        //this.presentToast('Error Tiempo:'+err.message);
-        return false;
+    for(let i=0;i<this.listaMails.length;i++){
+      if(this.listaMails[i].Email==mail){
+        return true;
       }
-    );
-    return true;
+    }
+    return false;
   }
   verificarEmail(mail:String){
     let sep=mail.split('@');

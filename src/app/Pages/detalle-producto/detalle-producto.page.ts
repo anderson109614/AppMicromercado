@@ -72,14 +72,21 @@ export class DetalleProductoPage implements OnInit {
     var est = (<HTMLSelectElement>document.getElementById("GorupDetalle")).value;
     const result = this.ListaDetalle.filter(producto => producto.Id == est);
     this.DetalleSelec=result[0];
-    this.Total= parseFloat(this.DetalleSelec.Precio)*this.cantidadSel;
+    this.Total= this.trunc(parseFloat(this.DetalleSelec.Precio)*this.cantidadSel,2);
     
   }
   CantidadSelected() {
     var est = (<HTMLSelectElement>document.getElementById("CantidaSel")).value;
     //const result = this.listaProductos.filter(producto => producto.Categoria.search(est) == 0);
     this.cantidadSel=parseFloat(est);
-    this.Total= parseFloat(this.DetalleSelec.Precio)*this.cantidadSel;
+    this.Total= this.trunc(parseFloat(this.DetalleSelec.Precio)*this.cantidadSel,2);
+  }
+  trunc (x, posiciones = 0) {
+    var s = x.toString()
+    var l = s.length
+    var decimalLength = s.indexOf('.') + 1
+    var numStr = s.substr(0, decimalLength + posiciones)
+    return Number(numStr)
   }
   regresarBTN() {
     this.modalController.dismiss({
@@ -91,7 +98,8 @@ export class DetalleProductoPage implements OnInit {
     let det:DetalleCompra={
       Det:this.DetalleSelec,
       Pro:this.Produ,
-      Cantidad:this.cantidadSel.toString()
+      Cantidad:this.cantidadSel.toString(),
+      SubTotal:this.Total.toString()
     };
     if(this.verificarAñadir(det)){
       this.modalController.dismiss({

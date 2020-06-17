@@ -322,8 +322,12 @@ export class FolderPage implements OnInit {
 
 
   }
-  enviarInformacioPedido() {
-
+  async enviarInformacioPedido() {
+    const loadingDBen = await this.loadingCtrl.create({
+      message: 'MICROMERCADO'
+    });
+    loadingDBen.present();
+    
     this.CargarLocalisacion();
     let ped: Pedido = {
       Id: '0',
@@ -331,7 +335,9 @@ export class FolderPage implements OnInit {
       Id_Cliente: this.ac.clienteUso.Id.toString(),
       Id_Estado: '1',
       Total: this.total,
-      Ubicacion: this.lat + ';' + this.lon
+      Ubicacion: this.lat + ';' + this.lon,
+      IVA:''
+
 
     };
     this.api.guardarPedido(ped).subscribe(
@@ -344,11 +350,12 @@ export class FolderPage implements OnInit {
                   this.ListaDetalles = [];
                   this.registrosUpt = this.ListaDetalles.length
                   this.btnDesactivado = true;
+                  loadingDBen.dismiss();
                 }
               },
               err => {
                 console.log(err);
-
+                loadingDBen.dismiss();
                 //this.presentToast('Error Tiempo:'+err.message);
               }
             );
@@ -358,7 +365,7 @@ export class FolderPage implements OnInit {
       },
       err => {
         console.log(err);
-
+        loadingDBen.dismiss();
         //this.presentToast('Error Tiempo:'+err.message);
       }
     );

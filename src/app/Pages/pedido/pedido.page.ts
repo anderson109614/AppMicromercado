@@ -19,9 +19,16 @@ export class PedidoPage implements OnInit {
   calcularToral(){
     this.total=0;
     for(let j=0;j<this.Lista.length;j++){
-      this.total+=parseFloat(this.Lista[j].Det.Precio)*parseFloat(this.Lista[j].Cantidad);
+      this.total+=this.trunc(parseFloat(this.Lista[j].Det.Precio)*parseFloat(this.Lista[j].Cantidad),2);
     
     }
+  }
+  trunc (x, posiciones = 0) {
+    var s = x.toString()
+    var l = s.length
+    var decimalLength = s.indexOf('.') + 1
+    var numStr = s.substr(0, decimalLength + posiciones)
+    return Number(numStr)
   }
   regresarBTN() {
     if(this.accion==0){

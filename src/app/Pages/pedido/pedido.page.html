@@ -43,7 +43,7 @@
       <ion-note slot="end" color="secondary" style="display: flex;
       align-items: center;vertical-align: middle;">{{det.Cantidad}}</ion-note>
       <ion-note slot="end" color="secondary">{{det.Det.Precio}}</ion-note>
-      <ion-note slot="end" color="secondary">{{det.Det.Precio*det.Cantidad}}</ion-note>
+      <ion-note slot="end" color="secondary">{{det.SubTotal}}</ion-note>
       <ion-checkbox color="danger" slot="start" (ionChange)="detalleChange($event.detail.checked,det.Det.Id )"></ion-checkbox>
     </ion-item-divider>
     
